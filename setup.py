@@ -6,10 +6,10 @@ from setuptools import setup, find_packages
 
 
 # We use the version to construct the DOWNLOAD_URL.
-VERSION = '0.5.0'
+VERSION = '0.5.1'
 
 # URL to the repository on Github.
-REPO_URL = 'https://github.com/krux/python-s3proxy'
+REPO_URL = 'https://github.com/reversefold/python-s3proxy'
 
 # Github will generate a tarball as long as you tag your releases, so don't
 # forget to tag!
@@ -20,9 +20,9 @@ setup(
     name='s3proxy',
     version=VERSION,
     author='Justin Patrin',
-    author_email='jpatrin@krux.com',
+    author_email='papercrane@reversefold.com',
     maintainer='Justin Patrin',
-    maintainer_email='jpatrin@krux.com',
+    maintainer_email='papercrane@reversefold.com',
     description='HTTP Proxy for S3 buckets',
     long_description="""
         Exposes an HTTP endpoint for a given S3 bucket and prefix.
