@@ -37,6 +37,7 @@ class S3Proxy(object):
         #self.app.debug = True
 
         self.status = self.app.route('/__status')(self.status)
+        self.handle = self.app.route('/')(self.handle)
         self.handle = self.app.route('/<path:path>')(self.handle)
 
     def run(self):
@@ -48,13 +49,13 @@ class S3Proxy(object):
     def status(self):
         return Response('{"status": "ok"}', mimetype='application/json')
 
-    def handle(self, path):
+    def handle(self, path=''):
         self.app.logger.debug('Request for path %r', path)
         self.app.logger.debug('s3://%s/%s%s', self.bucket_name, self.path, path)
         try:
             full_path = self.path + path
             self.app.logger.debug('full_path %r', full_path)
-            if path.endswith('/'):
+            if not path or path.endswith('/'):
                 return self.handle_directory(path)
 
             key = self.bucket.get_key(full_path)
