@@ -37,7 +37,8 @@ class S3Proxy(object):
         #self.app.debug = True
 
         self.status = self.app.route('/__status')(self.status)
-        self.handle = self.app.route('/')(self.app.route('/<path:path>')(self.handle))
+        self.handle = self.app.route('/')(self.handle)
+        self.handle = self.app.route('/<path:path>')(self.handle)
 
     def run(self):
         return self.app.run(
