@@ -76,7 +76,8 @@ class S3Proxy(object):
                     return ('', 404)
 
             self.app.logger.info('Found key for path %r', path)
-            return Response(key, mimetype='application/octet-stream')
+            mimetype = key.content_type or 'application/octet-stream'
+            return Response(key, mimetype=mimetype)
         except Exception, e:
             return (str(e), 404)
 
