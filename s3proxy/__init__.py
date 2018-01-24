@@ -60,20 +60,24 @@ class S3Proxy(object):
 
             key = self.bucket.get_key(full_path)
             if key is None:
-                # If we can't find a file, try it as a directory
-                ### Note: Some versions of pip will make some requests for what
-                ### should be directories without the trailing slash.
-                keys = self.bucket.list(full_path + '/', '/')
-                try:
-                    iter(keys).next()
-                    # there are keys to list, so send back a redirect so the client
-                    # knows it should be treating this as a directory.
-                    self.app.logger.warning(
-                        'path does not end in / but is a directory, redirecting %r', path)
-                    return redirect(path + '/')
-                except StopIteration:
-                    self.app.logger.warning('Key not found for path and not a directory %r', path)
-                    return ('', 404)
+                # If we can't find a file, try it with .html suffix
+                key = self.bucket.get_key(full_path + '.html')
+
+                if key is None:
+                    # If we still can't find a file, try it as a directory
+                    # Note: Some versions of pip will make some requests for what
+                    # should be directories without the trailing slash.
+                    keys = self.bucket.list(full_path + '/', '/')
+                    try:
+                        iter(keys).next()
+                        # there are keys to list, so send back a redirect so the client
+                        # knows it should be treating this as a directory.
+                        self.app.logger.warning(
+                            'path does not end in / but is a directory, redirecting %r', path)
+                        return redirect(path + '/')
+                    except StopIteration:
+                        self.app.logger.warning('Key not found for path and not a directory %r', path)
+                        return ('', 404)
 
             self.app.logger.info('Found key for path %r', path)
             mimetype = key.content_type or 'application/octet-stream'
