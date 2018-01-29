@@ -6,7 +6,7 @@ from setuptools import setup, find_packages
 
 
 # We use the version to construct the DOWNLOAD_URL.
-VERSION = '0.5.1.post0'
+VERSION = '0.5.1.post1'
 
 # URL to the repository on Github.
 REPO_URL = 'https://github.com/reversefold/python-s3proxy'
