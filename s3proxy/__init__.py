@@ -87,15 +87,15 @@ class S3Proxy(object):
             return (str(e), 404)
 
     def handle_directory(self, path):
-        if not self.list_directories:
-            return ('', 404)
-
         full_path = self.path + path
         self.app.logger.debug('Path ends in /, checking for index.html')
         key = self.bucket.get_key(full_path + 'index.html')
         if key is not None:
             self.app.logger.info('Found index.html for %r', path)
             return Response(key, mimetype='text/html')
+
+        if not self.list_directories:
+            return ('', 404)
 
         self.app.logger.debug('index.html not found, trying a manual listing')
         keys = self.bucket.list(full_path, '/')
