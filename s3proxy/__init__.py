@@ -56,6 +56,14 @@ class S3Proxy(object):
         try:
             full_path = self.path + path
             self.app.logger.debug('full_path %r', full_path)
+
+            if path.endswith('/'):
+                # Try to find a file with .html suffix first before trying to handle as directory
+                key = self.bucket.get_key(full_path[:-1] + '.html')
+                if key is not None:
+                    mimetype = key.content_type or 'application/octet-stream'
+                    return Response(key, mimetype=mimetype)
+
             if not path or path.endswith('/'):
                 return self.handle_directory(path)
 
